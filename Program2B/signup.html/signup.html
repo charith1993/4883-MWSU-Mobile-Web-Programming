@@ -1,10 +1,12 @@
+
+
 <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="index, follow">
  
-	<title>Charith's Signup Page</title>
+	<title>Example Happy Form</title>
  
 	<meta name="author"      content="">
 	<meta name="description" content="">
@@ -23,9 +25,7 @@
 	<link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
+
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->    
@@ -89,7 +89,7 @@
 
 				// Inject the icon if applicable
 				if ($button.find('.state-icon').length == 0) {
-					$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+					$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
 				}
 				var params = getUrlVars();
 	
@@ -165,7 +165,9 @@
 	  return vars;
 	}
 	
-
+	$(document).ready(function() {
+		$('#attributeForm').bootstrapValidator();
+	});
 	
 	</script>
 </head>
@@ -176,29 +178,34 @@
 <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 		<form id="registration" role="form" class="form-horizontal">
-                <form methof="POST" action="connectivity-backend.php">
 			<h2>Please Sign Up <small>It's free and always will be.</small></h2>
 			<hr class="colorgraph">
 			<div class="form-group">
         		<label class="col-lg-3 control-label">Full name</label>
 				<div class="col-lg-4">
-					<input type="text" class="form-control" name="First" placeholder="First name" />
+					<input type="text" class="form-control" name="firstName" placeholder="First name"
+						data-bv-notempty="true"
+						data-bv-notempty-message="The first name is required and cannot be empty" />
 				</div>
 				<div class="col-lg-4">
-					<input type="text" class="form-control" name="Last" placeholder="Last name" />
-				</div>
+					<input type="text" class="form-control" name="lastName" placeholder="Last name"
+						data-bv-notempty="true"
+						data-bv-notempty-message="The last name is required and cannot be empty" />
+					</div>
 			</div>
 			<div class="form-group">
 				<label class="col-lg-3 control-label">Phone number</label>
 				<div class="col-lg-5">
-					<input type="text" class="form-control" name="Phone" />
+					<input type="text" class="form-control" name="phone" />
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Email</label>
 				<div class="col-lg-4">
-					<input type="text" class="form-control" name="Email" />
+					<input type="text" class="form-control" name="email"
+						data-bv-emailaddress="true"
+						ata-bv-emailaddress-message="The input is not a valid email address" />
 				</div>
 				<label class="col-lg-2 control-label">Sex</label>
 				<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
@@ -218,12 +225,32 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-6 col-md-6">
 					<div class="form-group">
-						<input type="password" name="Password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5">
+						<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5"
+							data-bv-notempty="true"
+							data-bv-notempty-message="The password is required and cannot be empty"
+
+							data-bv-identical="true"
+							data-bv-identical-field="confirmPassword"
+							data-bv-identical-message="The password and its confirm are not the same"
+
+							data-bv-different="true"
+							data-bv-different-field="username"
+							data-bv-different-message="The password cannot be the same as username" />
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6">
 					<div class="form-group">
-						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="6">
+						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="6"
+							data-bv-notempty="true"
+							data-bv-notempty-message="The confirm password is required and cannot be empty"
+
+							data-bv-identical="true"
+							data-bv-identical-field="password"
+							data-bv-identical-message="The password and its confirm are not the same"
+
+							data-bv-different="true"
+							data-bv-different-field="username"
+							data-bv-different-message="The password cannot be the same as username" />	
 					</div>
 				</div>
 			</div>
@@ -253,7 +280,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
 				<h4 class="modal-title" id="myModalLabel">Terms & Conditions</h4>
 			</div>
 			<div class="modal-body">
