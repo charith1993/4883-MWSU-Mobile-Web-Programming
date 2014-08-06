@@ -1,10 +1,11 @@
+
 <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="index, follow">
  
-	<title>Charith's Signup Page</title>
+	<title>Program 2C </title>
  
 	<meta name="author"      content="">
 	<meta name="description" content="">
@@ -23,14 +24,40 @@
 	<link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
+
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->    
 	<link rel="stylesheet" href="style.css">
+	
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+	
+	<style>
+		hr {
+		border: 0;
+		height: 1px;
+		background: #333;
+		background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc); 
+		background-image:    -moz-linear-gradient(left, #ccc, #333, #ccc); 
+		background-image:     -ms-linear-gradient(left, #ccc, #333, #ccc); 
+		background-image:      -o-linear-gradient(left, #ccc, #333, #ccc); 
+}
+	
+	</style>
+	
+	
+	
 	<script>
+	$(document).ready(function() {
+		$('#attributeForm').bootstrapValidator();
+	});
+	
 	$(function () {
 		$('.button-checkbox').each(function () {
 			// Settings
@@ -89,7 +116,7 @@
 
 				// Inject the icon if applicable
 				if ($button.find('.state-icon').length == 0) {
-					$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+					$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
 				}
 				var params = getUrlVars();
 	
@@ -107,11 +134,11 @@
 		});
 		
 		$("#register").click(function() {
-			console.log($( "#registration" ).serialize());
+			console.log($( "#attributeForm" ).serialize());
 			$.ajax({
 				type: "POST",
-				url: "backend.php",
-				data: $( "#registration" ).serialize()
+				url: "backend_griffin.php",
+				data: $( "#attributeForm" ).serialize()
 			}).done(function( msg ) {
 				alert( "Data Saved: " + msg );
 			});
@@ -167,6 +194,62 @@
 	
 
 	
+	
+	
+	
+	
+	 // Put event listeners into place
+        window.addEventListener("DOMContentLoaded", function() {
+            // Grab elements, create settings, etc.
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var video = document.getElementById("video");
+            var videoObj = { "video": true };
+            var errBack = function(error) {
+                    console.log("Video capture error: ", error.code); 
+                };
+
+            // Put video listeners into place
+            if(navigator.getUserMedia) { // Standard
+                navigator.getUserMedia(videoObj, function(stream) {
+                    video.src = stream;
+                    video.play();
+                }, errBack);
+            } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+                navigator.webkitGetUserMedia(videoObj, function(stream){
+                    video.src = window.webkitURL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+            else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+                navigator.mozGetUserMedia(videoObj, function(stream){
+                    video.src = window.URL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+            // Trigger photo take
+            document.getElementById("snap").addEventListener("click", function() {
+              //Essentially crops a portion of the video to be our profile pic.
+                context.drawImage(video, 100, 100, 400 , 400,0,0,200,200);
+            });
+            document.getElementById("saveImage").addEventListener("click", function() {
+                $.post("backend.php",
+                {
+                    uid : Date.now(),
+                    name : "test",
+                    action : "image",
+                    img : canvas.toDataURL('image/png')
+                })
+                .done(function(data){
+                    alert("Data: " + data);
+                });
+            });
+        }, false);
+	
+	
+	
+	
+	
 	</script>
 </head>
 <body>
@@ -175,79 +258,158 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-		<form id="registration" role="form" class="form-horizontal">
-                <form methof="POST" action="connectivity-backend.php">
-			<h2>Please Sign Up <small>It's free and always will be.</small></h2>
-			<hr class="colorgraph">
-			<div class="form-group">
-        		<label class="col-lg-3 control-label">Full name</label>
-				<div class="col-lg-4">
-					<input type="text" class="form-control" name="First" placeholder="First name" />
-				</div>
-				<div class="col-lg-4">
-					<input type="text" class="form-control" name="Last" placeholder="Last name" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-lg-3 control-label">Phone number</label>
-				<div class="col-lg-5">
-					<input type="text" class="form-control" name="Phone" />
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-lg-2 control-label">Email</label>
-				<div class="col-lg-4">
-					<input type="text" class="form-control" name="Email" />
-				</div>
-				<label class="col-lg-2 control-label">Sex</label>
-				<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
-					M: 
-				</div>
-				<div class="col-lg-1" style="vertical-align:middle;margin-left:-15px">
-					<input type="radio" class="form-control" name="Sex" value="M">
-				</div>
-				<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
-					F: 
-				</div>
-				<div class="col-lg-1" style="vertical-align:middle;margin-left:-20px">
-					<input type="radio" class="form-control" name="Sex" value="F">
-				</div>					
-			</div>
+	
+	<form id="attributeForm" method="post" class="form-horizontal"
+    data-bv-message="This value is not valid"
+    data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+    data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+    data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Full name</label>
+        <div class="col-lg-4">
+            <input type="text" class="form-control" name="First" placeholder="First name"
+                data-bv-notempty="true"
+                data-bv-notempty-message="The first name is required and cannot be empty" />
+        </div>
+        <div class="col-lg-4">
+            <input type="text" class="form-control" name="Last" placeholder="Last name"
+                data-bv-notempty="true"
+                data-bv-notempty-message="The last name is required and cannot be empty" />
+        </div>
+    </div>
 
-			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-6">
-					<div class="form-group">
-						<input type="password" name="Password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5">
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6">
-					<div class="form-group">
-						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="6">
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-4 col-sm-3 col-md-3">
-					<span class="button-checkbox">
-						<button type="button" class="btn" data-color="info" tabindex="7">I Agree</button>
-                        <input type="checkbox" name="t_and_c" id="t_and_c" class="hidden" value="1">
-					</span>
-				</div>
-				<div class="col-xs-8 col-sm-9 col-md-9">
-					 By clicking <strong class="label label-primary">Register</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
-				</div>
-			</div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Username</label>
+        <div class="col-lg-5">
+            <input type="text" class="form-control" name="username"
+                data-bv-message="The username is not valid"
+
+                data-bv-notempty="true"
+                data-bv-notempty-message="The username is required and cannot be empty"
+
+                data-bv-regexp="true"
+                data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
+                data-bv-regexp-message="The username can only consist of alphabetical, number, dot and underscore"
+
+                data-bv-stringlength="true"
+                data-bv-stringlength-min="6"
+                data-bv-stringlength-max="30"
+                data-bv-stringlength-message="The username must be more than 6 and less than 30 characters long"
+
+                data-bv-different="true"
+                data-bv-different-field="password"
+                data-bv-different-message="The username and password cannot be the same as each other" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Email address</label>
+        <div class="col-lg-5">
+            <input class="form-control" name="Email" type="email"
+                data-bv-emailaddress="true"
+                data-bv-emailaddress-message="The input is not a valid email address" />
+        </div>
+	</div>
+	<div class="form-group">
+		<label class="col-lg-3 control-label">Phone number</label>
+		<div class="col-lg-5">
+			<input type="text" class="form-control" name="Phone"
+			data-bv-phone="true"
+            data-bv-phone-message="The input is not a valid phone number" />
+		</div>
+	</div>
+    
+	
+	<div class="form-group">
+		<label class="col-lg-6 control-label">Sex</label>
+		<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
+			M: 
+		</div>
+		<div class="col-lg-1" style="vertical-align:middle;margin-left:-15px">
+			<input type="radio" class="form-control" name="Sex" value="M">
+		</div>
+		<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
+			F: 
+		</div>
+		<div class="col-lg-1" style="vertical-align:middle;margin-left:-20px">
+			<input type="radio" class="form-control" name="Sex" value="F">
+		</div>
+	</div>	
+	
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Password</label>
+        <div class="col-lg-5">
+            <input type="password" class="form-control" name="Password"
+                data-bv-notempty="true"
+                data-bv-notempty-message="The password is required and cannot be empty"
+
+                data-bv-identical="true"
+                data-bv-identical-field="confirmPassword"
+                data-bv-identical-message="The password and its confirm are not the same"
+
+                data-bv-different="true"
+                data-bv-different-field="username"
+                data-bv-different-message="The password cannot be the same as username" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Retype password</label>
+        <div class="col-lg-5">
+            <input type="password" class="form-control" name="confirmPassword"
+                data-bv-notempty="true"
+                data-bv-notempty-message="The confirm password is required and cannot be empty"
+
+                data-bv-identical="true"
+                data-bv-identical-field="password"
+                data-bv-identical-message="The passwords do not match"
+
+                data-bv-different="true"
+                data-bv-different-field="username"
+                data-bv-different-message="The password cannot be the same as username" />
+        </div>
+    </div>
+	<div class="row">
+		<div class="col-xs-4 col-sm-3 col-md-3">
+			<span class="button-checkbox">
+				<button type="button" class="btn" data-color="info" tabindex="7">I Agree</button>
+                <input type="checkbox" name="t_and_c" id="t_and_c" class="hidden" value="1">
+			</span>
+		</div>
+		
+		<div class="col-xs-8 col-sm-9 col-md-9">
+			 By clicking <strong class="label label-primary">Register</strong>, you agree to the <a href="terms.html" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
+		</div>
+	</div>
 			
-			<hr class="colorgraph">
-			<div class="row">
-				<div class="col-xs-12 col-md-6"><input type="button" id="register" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
-				<div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg">Sign In</a></div>
-			</div>
-			<input type="hidden" name="action" value="insert">
-		</form>
+	<hr class="colorgraph">
+	<div class="row">
+		<div class="col-xs-12 col-md-6"><input type="button" id="register" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+		<div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg">Sign In</a></div>
+	</div>
+	<input type="hidden" name="action" value="insert">
+	
+</form>
+			
 	</div>
 </div>
+
+
+<HR>
+<div>
+	<video id="video" width="266" height="200" autoplay></video>
+	<button id="snap">Snap Photo</button>
+	<canvas id="canvas" width="266" height="200"></canvas>
+	<button id="saveImage">Save Photo</button>
+
+</div>
+
+
+
+
+
+
 <!-- Modal -->
 <div class="modal fade" id="t_and_c_m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
