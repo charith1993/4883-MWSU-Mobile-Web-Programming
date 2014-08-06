@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="index, follow">
+ 
+	<title>Charith's Signup Page</title>
+ 
+	<meta name="author"      content="">
+	<meta name="description" content="">
+ 
+ 
+	<!-- Script -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="media.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
+
+	<!-- Style -->
+    <meta name="viewport"     content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!--<link rel="stylesheet"    href="style/normalize.css"   type="text/css">-->
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" />
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->    
+	<link rel="stylesheet" href="style.css">
+	<script>
+	$(function () {
+		$('.button-checkbox').each(function () {
+			// Settings
+			var $widget = $(this),
+				$button = $widget.find('button'),
+				$checkbox = $widget.find('input:checkbox'),
+				color = $button.data('color'),
+				settings = {
+					on: {
+						icon: 'glyphicon glyphicon-check'
+					},
+					off: {
+						icon: 'glyphicon glyphicon-unchecked'
+					}
+				};
+
+			// Event Handlers
+			$button.on('click', function () {
+				$checkbox.prop('checked', !$checkbox.is(':checked'));
+				$checkbox.triggerHandler('change');
+				updateDisplay();
+			});
+			$checkbox.on('change', function () {
+				updateDisplay();
+			});
+
+			// Actions
+			function updateDisplay() {
+				var isChecked = $checkbox.is(':checked');
+
+				// Set the button's state
+				$button.data('state', (isChecked) ? "on" : "off");
+
+				// Set the button's icon
+				$button.find('.state-icon')
+					.removeClass()
+					.addClass('state-icon ' + settings[$button.data('state')].icon);
+
+				// Update the button's color
+				if (isChecked) {
+					$button
+						.removeClass('btn-default')
+						.addClass('btn-' + color + ' active');
+				}
+				else {
+					$button
+						.removeClass('btn-' + color + ' active')
+						.addClass('btn-default');
+				}
+			}
+
+			// Initialization
+			function init() {
+
+				updateDisplay();
+
+				// Inject the icon if applicable
+				if ($button.find('.state-icon').length == 0) {
+					$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+				}
+				var params = getUrlVars();
+	
+				if(params["debug"]){
+					console.log("in the if");
+					$('#first_name').val('Joe');
+					$('#last_name').val('Smith');
+					$('#email').val('joe.smith@yahoo.com');
+					$('#phone').val('1234567890');
+					$('#password').val('hello');
+					$('#password_confirmation').val('hello');		
+				}
+			}
+			init();
+		});
+		
+		$("#register").click(function() {
+			console.log($( "#registration" ).serialize());
+			$.ajax({
+				type: "POST",
+				url: "backend.php",
+				data: $( "#registration" ).serialize()
+			}).done(function( msg ) {
+				alert( "Data Saved: " + msg );
+			});
+		});
+		
+		$('#registration').bootstrapValidator({
+			container: 'tooltip',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				firstName: {
+					validators: {
+						notEmpty: {
+							message: 'The first name is required'
+						}
+					}
+				},
+				lastName: {
+					validators: {
+						notEmpty: {
+							message: 'The last name is required'
+						}
+					}
+				},
+				phone: {
+					validators: {
+						digits: {
+							message: 'The phone number can contain digits only'
+						},
+						notEmpty: {
+							message: 'The phone number is required'
+						}
+					}
+				}
+			}
+		});
+	});
+	
+	function getUrlVars() {
+	  var vars = [], hash;
+	  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	  for(var i = 0; i < hashes.length; i++)
+	  {
+		  hash = hashes[i].split('=');
+		  vars.push(hash[0]);
+		  vars[hash[0]] = hash[1];
+	  }
+	  return vars;
+	}
+	
+
+	
+	</script>
+</head>
+<body>
+	<div class="container">
+<div class="container">
+
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+		<form id="registration" role="form" class="form-horizontal">
+                <form methof="POST" action="connectivity-backend.php">
+			<h2>Please Sign Up <small>It's free and always will be.</small></h2>
+			<hr class="colorgraph">
+			<div class="form-group">
+        		<label class="col-lg-3 control-label">Full name</label>
+				<div class="col-lg-4">
+					<input type="text" class="form-control" name="First" placeholder="First name" />
+				</div>
+				<div class="col-lg-4">
+					<input type="text" class="form-control" name="Last" placeholder="Last name" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-3 control-label">Phone number</label>
+				<div class="col-lg-5">
+					<input type="text" class="form-control" name="Phone" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Email</label>
+				<div class="col-lg-4">
+					<input type="text" class="form-control" name="Email" />
+				</div>
+				<label class="col-lg-2 control-label">Sex</label>
+				<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
+					M: 
+				</div>
+				<div class="col-lg-1" style="vertical-align:middle;margin-left:-15px">
+					<input type="radio" class="form-control" name="Sex" value="M">
+				</div>
+				<div class="col-lg-1" style="padding-top:10px;padding-left:30px">
+					F: 
+				</div>
+				<div class="col-lg-1" style="vertical-align:middle;margin-left:-20px">
+					<input type="radio" class="form-control" name="Sex" value="F">
+				</div>					
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group">
+						<input type="password" name="Password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5">
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group">
+						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="6">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 col-sm-3 col-md-3">
+					<span class="button-checkbox">
+						<button type="button" class="btn" data-color="info" tabindex="7">I Agree</button>
+                        <input type="checkbox" name="t_and_c" id="t_and_c" class="hidden" value="1">
+					</span>
+				</div>
+				<div class="col-xs-8 col-sm-9 col-md-9">
+					 By clicking <strong class="label label-primary">Register</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
+				</div>
+			</div>
+			
+			<hr class="colorgraph">
+			<div class="row">
+				<div class="col-xs-12 col-md-6"><input type="button" id="register" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+				<div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg">Sign In</a></div>
+			</div>
+			<input type="hidden" name="action" value="insert">
+		</form>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="t_and_c_m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel">Terms & Conditions</h4>
+			</div>
+			<div class="modal-body">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">I Agree</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>
+	</div>
+</body>
+</html>
